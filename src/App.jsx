@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import WeeklyGrid from './components/WeeklyGrid';
 import TodayView from './components/TodayView';
+import { MEAL_IDS } from './components/DayCard';
 import ShoppingList from './components/ShoppingList';
 import StickerPad from './components/StickerPad';
 import Sticker from './components/Sticker';
@@ -31,7 +32,20 @@ function App() {
     const savedTitle = localStorage.getItem(STORAGE_KEY_TITLE);
     const savedGoals = localStorage.getItem(STORAGE_KEY_GOALS);
 
-    if (savedData) setWeeklyData(JSON.parse(savedData));
+    if (savedData) {
+      const parsedData = JSON.parse(savedData);
+      const cleanedData = {};
+      Object.entries(parsedData).forEach(([dayId, dayData]) => {
+        const cleanedDayData = {};
+        Object.entries(dayData).forEach(([mealId, mealData]) => {
+          if (MEAL_IDS.includes(mealId)) {
+            cleanedDayData[mealId] = mealData;
+          }
+        });
+        cleanedData[dayId] = cleanedDayData;
+      });
+      setWeeklyData(cleanedData);
+    }
     if (savedShopping) setShopping(JSON.parse(savedShopping));
     if (savedStickers) setStickers(JSON.parse(savedStickers));
     if (savedTitle) setWeekLabel(savedTitle);

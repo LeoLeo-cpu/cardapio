@@ -41,6 +41,8 @@ const MEALS_CONFIG = [
   }
 ];
 
+export const MEAL_IDS = MEALS_CONFIG.map(meal => meal.id);
+
 export default function DayCard({ dayId, dayName, data, updateDish, removeDish, addDish, moveDish, addDrink, updateDrink, removeDrink, updateMealMacros }) {
   const [dragOverMeal, setDragOverMeal] = React.useState(null);
   const [activeDish, setActiveDish] = React.useState(null);
