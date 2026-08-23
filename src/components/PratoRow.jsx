@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function PratoRow({ dayId, mealId, dish, updateDish, removeDish, onRowClick }) {
+export default function PratoRow({ dayId, mealId, dish, updateDish, removeDish, onRowClick, draggable = true }) {
   const handleDragStart = (e) => {
     e.dataTransfer.setData('dayId', dayId);
     e.dataTransfer.setData('mealId', mealId);
@@ -28,17 +28,19 @@ export default function PratoRow({ dayId, mealId, dish, updateDish, removeDish, 
       onMouseEnter={e => e.currentTarget.style.background = 'rgba(0,0,0,0.03)'}
       onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
     >
-      <span 
-        draggable
-        onDragStart={handleDragStart}
-        onClick={e => e.stopPropagation()}
-        style={{ cursor: 'grab', touchAction: 'none', userSelect: 'none', width: '24px', height: '24px', flex: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.4 }}
-      >
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.75" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="9" cy="5" r="1"></circle><circle cx="9" cy="12" r="1"></circle><circle cx="9" cy="19" r="1"></circle>
-          <circle cx="15" cy="5" r="1"></circle><circle cx="15" cy="12" r="1"></circle><circle cx="15" cy="19" r="1"></circle>
-        </svg>
-      </span>
+      {draggable && (
+        <span
+          draggable
+          onDragStart={handleDragStart}
+          onClick={e => e.stopPropagation()}
+          style={{ cursor: 'grab', touchAction: 'none', userSelect: 'none', width: '24px', height: '24px', flex: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.4 }}
+        >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.75" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="9" cy="5" r="1"></circle><circle cx="9" cy="12" r="1"></circle><circle cx="9" cy="19" r="1"></circle>
+            <circle cx="15" cy="5" r="1"></circle><circle cx="15" cy="12" r="1"></circle><circle cx="15" cy="19" r="1"></circle>
+          </svg>
+        </span>
+      )}
 
       <button onClick={handleToggle} className="btn btn-icon btn-ghost" style={{ width: '20px', height: '20px', padding: 0, opacity: dish.done ? 1 : 0.3, color: dish.done ? 'var(--color-accent)' : 'inherit' }}>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

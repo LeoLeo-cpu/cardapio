@@ -51,8 +51,8 @@ function App() {
     }
   }, [weeklyData, shopping, stickers, weekLabel, goals, isLoaded]);
 
-  // Dish actions
-  const addDish = (dayId, mealId) => {
+  // Dish/drink actions
+  const addListItem = (dayId, mealId, listKey, item) => {
     setWeeklyData(prev => {
       const dayData = prev[dayId] || {};
       const mealData = dayData[mealId] || { dishes: [] };
@@ -62,45 +62,69 @@ function App() {
           ...dayData,
           [mealId]: {
             ...mealData,
-            dishes: [...(mealData.dishes || []), { id: Date.now().toString(), name: 'Novo prato', ingredients: '', done: false }]
+            [listKey]: [...(mealData[listKey] || []), item]
           }
         }
       };
     });
+  };
+
+  const updateListItem = (dayId, mealId, listKey, itemId, patch) => {
+    setWeeklyData(prev => {
+      const dayData = prev[dayId] || {};
+      const mealData = dayData[mealId] || { dishes: [] };
+      return {
+        ...prev,
+        [dayId]: {
+          ...dayData,
+          [mealId]: {
+            ...mealData,
+            [listKey]: (mealData[listKey] || []).map(item => item.id === itemId ? { ...item, ...patch } : item)
+          }
+        }
+      };
+    });
+  };
+
+  const removeListItem = (dayId, mealId, listKey, itemId) => {
+    setWeeklyData(prev => {
+      const dayData = prev[dayId] || {};
+      const mealData = dayData[mealId] || { dishes: [] };
+      return {
+        ...prev,
+        [dayId]: {
+          ...dayData,
+          [mealId]: {
+            ...mealData,
+            [listKey]: (mealData[listKey] || []).filter(item => item.id !== itemId)
+          }
+        }
+      };
+    });
+  };
+
+  const addDish = (dayId, mealId) => {
+    addListItem(dayId, mealId, 'dishes', { id: Date.now().toString(), name: 'Novo prato', ingredients: '', done: false });
   };
 
   const updateDish = (dayId, mealId, dishId, patch) => {
-    setWeeklyData(prev => {
-      const dayData = prev[dayId] || {};
-      const mealData = dayData[mealId] || { dishes: [] };
-      return {
-        ...prev,
-        [dayId]: {
-          ...dayData,
-          [mealId]: {
-            ...mealData,
-            dishes: mealData.dishes.map(d => d.id === dishId ? { ...d, ...patch } : d)
-          }
-        }
-      };
-    });
+    updateListItem(dayId, mealId, 'dishes', dishId, patch);
   };
 
   const removeDish = (dayId, mealId, dishId) => {
-    setWeeklyData(prev => {
-      const dayData = prev[dayId] || {};
-      const mealData = dayData[mealId] || { dishes: [] };
-      return {
-        ...prev,
-        [dayId]: {
-          ...dayData,
-          [mealId]: {
-            ...mealData,
-            dishes: mealData.dishes.filter(d => d.id !== dishId)
-          }
-        }
-      };
-    });
+    removeListItem(dayId, mealId, 'dishes', dishId);
+  };
+
+  const addDrink = (dayId, mealId) => {
+    addListItem(dayId, mealId, 'drinks', { id: Date.now().toString(), name: 'Nova bebida', ingredients: '', done: false });
+  };
+
+  const updateDrink = (dayId, mealId, drinkId, patch) => {
+    updateListItem(dayId, mealId, 'drinks', drinkId, patch);
+  };
+
+  const removeDrink = (dayId, mealId, drinkId) => {
+    removeListItem(dayId, mealId, 'drinks', drinkId);
   };
 
   const moveDish = (sourceDayId, sourceMealId, targetDayId, targetMealId, dishId) => {
@@ -176,19 +200,22 @@ function App() {
     );
     const newTexts = new Set();
 
+    const collectIngredients = (item) => {
+      const ingredients = Array.isArray(item.ingredients) ? item.ingredients : [];
+      ingredients.forEach(ing => {
+        const normalized = (ing.text || '').trim();
+        if (!normalized) return;
+        const key = normalized.toLowerCase();
+        if (!existingTexts.has(key) && !newTexts.has(key)) {
+          newTexts.add(key);
+        }
+      });
+    };
+
     Object.values(weeklyData).forEach(dayData => {
       Object.values(dayData).forEach(mealData => {
-        (mealData.dishes || []).forEach(dish => {
-          const ingredients = Array.isArray(dish.ingredients) ? dish.ingredients : [];
-          ingredients.forEach(ing => {
-            const normalized = (ing.text || '').trim();
-            if (!normalized) return;
-            const key = normalized.toLowerCase();
-            if (!existingTexts.has(key) && !newTexts.has(key)) {
-              newTexts.add(key);
-            }
-          });
-        });
+        (mealData.dishes || []).forEach(collectIngredients);
+        (mealData.drinks || []).forEach(collectIngredients);
       });
     });
 
@@ -344,6 +371,9 @@ function App() {
           updateDish={updateDish}
           removeDish={removeDish}
           moveDish={moveDish}
+          addDrink={addDrink}
+          updateDrink={updateDrink}
+          removeDrink={removeDrink}
           updateMealMacros={updateMealMacros}
         />
       ) : (
@@ -353,6 +383,9 @@ function App() {
           updateDish={updateDish}
           removeDish={removeDish}
           moveDish={moveDish}
+          addDrink={addDrink}
+          updateDrink={updateDrink}
+          removeDrink={removeDrink}
           goals={goals}
           updateGoal={updateGoal}
           updateMealMacros={updateMealMacros}

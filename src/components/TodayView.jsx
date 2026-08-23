@@ -2,7 +2,7 @@ import React from 'react';
 import DayCard from './DayCard';
 import NutritionDashboard from './NutritionDashboard';
 
-export default function TodayView({ weeklyData, updateDish, removeDish, addDish, moveDish, goals, updateGoal, updateMealMacros }) {
+export default function TodayView({ weeklyData, updateDish, removeDish, addDish, moveDish, addDrink, updateDrink, removeDrink, goals, updateGoal, updateMealMacros }) {
   // Get current day id (e.g. 'mon', 'tue')
   const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
   const todayIndex = new Date().getDay();
@@ -24,7 +24,7 @@ export default function TodayView({ weeklyData, updateDish, removeDish, addDish,
     <div style={{ display: 'flex', gap: '24px', position: 'relative', zIndex: 1, alignItems: 'flex-start', flexWrap: 'wrap' }}>
       {/* Left Column: Today's Meals */}
       <div style={{ flex: '1 1 400px', minWidth: '300px' }}>
-        <DayCard 
+        <DayCard
           dayId={currentDayId}
           dayName={`Hoje (${dayNames[currentDayId]})`}
           data={dayData}
@@ -32,8 +32,10 @@ export default function TodayView({ weeklyData, updateDish, removeDish, addDish,
           removeDish={removeDish}
           addDish={addDish}
           moveDish={moveDish}
+          addDrink={addDrink}
+          updateDrink={updateDrink}
+          removeDrink={removeDrink}
           updateMealMacros={updateMealMacros}
-          showDessertDrinks={true}
         />
       </div>
 

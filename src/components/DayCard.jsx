@@ -4,57 +4,49 @@ import DishModal from './DishModal';
 import MealMacrosModal from './MealMacrosModal';
 
 const MEALS_CONFIG = [
-  { 
-    id: 'breakfast', 
-    name: 'Café da manhã', 
-    iconColor: 'var(--color-accent-100)', 
+  {
+    id: 'breakfast',
+    name: 'Café da manhã',
+    iconColor: 'var(--color-accent-100)',
     iconTextColor: 'var(--color-accent-700)',
     iconSvg: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.75" strokeLinecap="round" strokeLinejoin="round"><path d="M17 8h1a4 4 0 1 1 0 8h-1"></path><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"></path><line x1="6" y1="2" x2="6" y2="4"></line><line x1="10" y1="2" x2="10" y2="4"></line><line x1="14" y1="2" x2="14" y2="4"></line></svg>
   },
-  { 
-    id: 'lunch', 
-    name: 'Almoço', 
-    iconColor: 'var(--color-accent-2-100)', 
+  {
+    id: 'morning_snack',
+    name: 'Lanche da manhã',
+    iconColor: 'var(--color-accent-2-100)',
     iconTextColor: 'var(--color-accent-2-700)',
-    iconSvg: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.75" strokeLinecap="round" strokeLinejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path><path d="M7 2v20"></path><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg>
-  },
-  { 
-    id: 'snack', 
-    name: 'Lanche', 
-    iconColor: 'var(--color-accent-100)', 
-    iconTextColor: 'var(--color-accent-700)',
     iconSvg: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.75" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M8.5 8.5v.01"></path><path d="M15.5 12v.01"></path><path d="M11 15.5v.01"></path></svg>
   },
-  { 
-    id: 'dinner', 
-    name: 'Jantar', 
-    iconColor: 'var(--color-accent-2-100)', 
-    iconTextColor: 'var(--color-accent-2-700)',
-    iconSvg: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.75" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3a7 7 0 1 0 9 9 9 9 0 0 1-9-9Z"></path></svg>
-  },
-  { 
-    id: 'dessert', 
-    name: 'Sobremesa', 
-    iconColor: 'var(--color-accent-100)', 
+  {
+    id: 'lunch',
+    name: 'Almoço',
+    iconColor: 'var(--color-accent-100)',
     iconTextColor: 'var(--color-accent-700)',
-    iconSvg: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.75" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="5"></circle><path d="M8.5 12 12 21l3.5-9"></path></svg>
+    iconSvg: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.75" strokeLinecap="round" strokeLinejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path><path d="M7 2v20"></path><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg>
   },
-  { 
-    id: 'drinks', 
-    name: 'Bebidas', 
-    iconColor: 'var(--color-accent-2-100)', 
+  {
+    id: 'afternoon_snack',
+    name: 'Lanche da tarde',
+    iconColor: 'var(--color-accent-2-100)',
     iconTextColor: 'var(--color-accent-2-700)',
-    iconSvg: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.75" strokeLinecap="round" strokeLinejoin="round"><path d="M6 8h12l-1 11.5a2 2 0 0 1-2 1.5H9a2 2 0 0 1-2-1.5Z"></path><path d="M6 8 5 4h14l-1 4"></path><path d="m8 12 4-3 4 3"></path></svg>
+    iconSvg: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.75" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M8.5 8.5v.01"></path><path d="M15.5 12v.01"></path><path d="M11 15.5v.01"></path></svg>
+  },
+  {
+    id: 'dinner',
+    name: 'Jantar',
+    iconColor: 'var(--color-accent-100)',
+    iconTextColor: 'var(--color-accent-700)',
+    iconSvg: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.75" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3a7 7 0 1 0 9 9 9 9 0 0 1-9-9Z"></path></svg>
   }
 ];
 
-export default function DayCard({ dayId, dayName, data, updateDish, removeDish, addDish, moveDish, updateMealMacros, showDessertDrinks = true }) {
+export default function DayCard({ dayId, dayName, data, updateDish, removeDish, addDish, moveDish, addDrink, updateDrink, removeDrink, updateMealMacros }) {
   const [dragOverMeal, setDragOverMeal] = React.useState(null);
   const [activeDish, setActiveDish] = React.useState(null);
   const [activeMealMacros, setActiveMealMacros] = React.useState(null);
 
   const totalCalories = MEALS_CONFIG.reduce((total, meal) => {
-    if (!showDessertDrinks && (meal.id === 'dessert' || meal.id === 'drinks')) return total;
     const cals = parseInt(data[meal.id]?.calories?.toString().replace(/\D/g, ''), 10);
     return total + (isNaN(cals) ? 0 : cals);
   }, 0);
@@ -86,11 +78,11 @@ export default function DayCard({ dayId, dayName, data, updateDish, removeDish, 
       </div>
 
       {MEALS_CONFIG.map(meal => {
-        if (!showDessertDrinks && (meal.id === 'dessert' || meal.id === 'drinks')) return null;
-        
         const mealData = data[meal.id] || {};
         const dishes = mealData.dishes || [];
+        const drinks = mealData.drinks || [];
         const isEmpty = dishes.length === 0;
+        const isDrinksEmpty = drinks.length === 0;
         const mealCaloriesRaw = parseInt(mealData.calories?.toString().replace(/\D/g, ''), 10);
         const mealCalories = isNaN(mealCaloriesRaw) ? 0 : mealCaloriesRaw;
 
@@ -155,18 +147,45 @@ export default function DayCard({ dayId, dayName, data, updateDish, removeDish, 
               }}
             >
               {dishes.map(dish => (
-                <PratoRow 
-                  key={dish.id} 
+                <PratoRow
+                  key={dish.id}
                   dayId={dayId}
                   mealId={meal.id}
-                  dish={dish} 
+                  dish={dish}
                   updateDish={(patch) => updateDish(dayId, meal.id, dish.id, patch)}
                   removeDish={() => removeDish(dayId, meal.id, dish.id)}
-                  onRowClick={() => setActiveDish({ ...dish, mealId: meal.id })}
+                  onRowClick={() => setActiveDish({ ...dish, mealId: meal.id, listKey: 'dishes' })}
                 />
               ))}
               {isEmpty && (
                 <div style={{ fontSize: '12px', opacity: 0.4, padding: '4px 4px' }}>nenhum prato ainda</div>
+              )}
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: '8px 0 5px' }}>
+              <span style={{ fontFamily: 'var(--font-heading)', fontSize: '12px', opacity: 0.7, flex: 1 }}>Bebidas</span>
+              <button onClick={() => addDrink(dayId, meal.id)} className="btn btn-icon btn-ghost" style={{ width: '24px', height: '24px' }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.75" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+              </button>
+            </div>
+            <div style={{ padding: '5px' }}>
+              {drinks.map(drink => (
+                <PratoRow
+                  key={drink.id}
+                  dayId={dayId}
+                  mealId={meal.id}
+                  dish={drink}
+                  draggable={false}
+                  updateDish={(patch) => updateDrink(dayId, meal.id, drink.id, patch)}
+                  removeDish={() => removeDrink(dayId, meal.id, drink.id)}
+                  onRowClick={() => setActiveDish({ ...drink, mealId: meal.id, listKey: 'drinks' })}
+                />
+              ))}
+              {isDrinksEmpty && (
+                <div style={{ fontSize: '12px', opacity: 0.4, padding: '4px 4px' }}>nenhuma bebida ainda</div>
               )}
             </div>
           </div>
@@ -177,8 +196,12 @@ export default function DayCard({ dayId, dayName, data, updateDish, removeDish, 
         <DishModal
           dish={activeDish}
           onClose={() => setActiveDish(null)}
-          onSave={(updatedDish) => {
-            updateDish(dayId, activeDish.mealId, activeDish.id, updatedDish);
+          onSave={(updatedItem) => {
+            if (activeDish.listKey === 'drinks') {
+              updateDrink(dayId, activeDish.mealId, activeDish.id, updatedItem);
+            } else {
+              updateDish(dayId, activeDish.mealId, activeDish.id, updatedItem);
+            }
           }}
         />
       )}
