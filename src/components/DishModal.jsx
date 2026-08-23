@@ -86,29 +86,6 @@ export default function DishModal({ dish, onClose, onSave }) {
             />
           </div>
 
-          {/* Macros */}
-          <div>
-            <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--color-accent-900)', marginBottom: '8px' }}>INFORMAÇÕES NUTRICIONAIS</label>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-              <div>
-                <span style={{ fontSize: '12px', color: '#666' }}>Calorias (kcal)</span>
-                <input type="number" value={localDish.calories || ''} onChange={e => handleChange('calories', e.target.value)} style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid rgba(0,0,0,0.1)' }} />
-              </div>
-              <div>
-                <span style={{ fontSize: '12px', color: '#666' }}>Proteínas (g)</span>
-                <input type="number" value={localDish.proteins || ''} onChange={e => handleChange('proteins', e.target.value)} style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid rgba(0,0,0,0.1)' }} />
-              </div>
-              <div>
-                <span style={{ fontSize: '12px', color: '#666' }}>Carboidratos (g)</span>
-                <input type="number" value={localDish.carbs || ''} onChange={e => handleChange('carbs', e.target.value)} style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid rgba(0,0,0,0.1)' }} />
-              </div>
-              <div>
-                <span style={{ fontSize: '12px', color: '#666' }}>Gorduras (g)</span>
-                <input type="number" value={localDish.fats || ''} onChange={e => handleChange('fats', e.target.value)} style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid rgba(0,0,0,0.1)' }} />
-              </div>
-            </div>
-          </div>
-
           {/* Ingredientes */}
           <div>
             <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--color-accent-900)', marginBottom: '8px' }}>INGREDIENTES</label>

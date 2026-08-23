@@ -4,16 +4,14 @@ export default function NutritionDashboard({ dailyDishes, goals, updateGoal }) {
   const [waterGlasses, setWaterGlasses] = useState(0);
   const totalWater = 8; // 8 glasses of 250ml = 2L
 
-  // Calculate totals from dishes
+  // Calculate totals from meals
   let totalCals = 0, totalP = 0, totalC = 0, totalF = 0;
-  
+
   Object.values(dailyDishes).forEach(mealData => {
-    (mealData.dishes || []).forEach(dish => {
-      totalCals += parseInt(dish.calories || 0, 10);
-      totalP += parseInt(dish.proteins || 0, 10);
-      totalC += parseInt(dish.carbs || 0, 10);
-      totalF += parseInt(dish.fats || 0, 10);
-    });
+    totalCals += parseInt(mealData.calories || 0, 10);
+    totalP += parseInt(mealData.proteins || 0, 10);
+    totalC += parseInt(mealData.carbs || 0, 10);
+    totalF += parseInt(mealData.fats || 0, 10);
   });
 
   const getPercent = (value, goal) => Math.min(100, Math.round((value / goal) * 100)) || 0;

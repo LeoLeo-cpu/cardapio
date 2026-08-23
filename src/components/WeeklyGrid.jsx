@@ -11,7 +11,7 @@ const DAYS = [
   { id: 'sun', name: 'Domingo' }
 ];
 
-export default function WeeklyGrid({ weeklyData, updateDish, removeDish, addDish, moveDish }) {
+export default function WeeklyGrid({ weeklyData, updateDish, removeDish, addDish, moveDish, updateMealMacros }) {
   return (
     <main style={{ position: 'relative', zIndex: 1, display: 'flex', flexWrap: 'wrap', gap: '14px' }}>
       {DAYS.map(day => (
@@ -24,6 +24,7 @@ export default function WeeklyGrid({ weeklyData, updateDish, removeDish, addDish
           removeDish={removeDish}
           addDish={addDish}
           moveDish={moveDish}
+          updateMealMacros={updateMealMacros}
         />
       ))}
     </main>

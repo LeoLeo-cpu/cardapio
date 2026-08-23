@@ -1,6 +1,7 @@
 import React from 'react';
 import PratoRow from './PratoRow';
 import DishModal from './DishModal';
+import MealMacrosModal from './MealMacrosModal';
 
 const MEALS_CONFIG = [
   { 
@@ -47,18 +48,15 @@ const MEALS_CONFIG = [
   }
 ];
 
-export default function DayCard({ dayId, dayName, data, updateDish, removeDish, addDish, moveDish, showDessertDrinks = true }) {
+export default function DayCard({ dayId, dayName, data, updateDish, removeDish, addDish, moveDish, updateMealMacros, showDessertDrinks = true }) {
   const [dragOverMeal, setDragOverMeal] = React.useState(null);
   const [activeDish, setActiveDish] = React.useState(null);
+  const [activeMealMacros, setActiveMealMacros] = React.useState(null);
 
   const totalCalories = MEALS_CONFIG.reduce((total, meal) => {
     if (!showDessertDrinks && (meal.id === 'dessert' || meal.id === 'drinks')) return total;
-    const dishes = data[meal.id]?.dishes || [];
-    const mealCals = dishes.reduce((sum, dish) => {
-      const cals = parseInt(dish.calories?.toString().replace(/\D/g, ''), 10);
-      return sum + (isNaN(cals) ? 0 : cals);
-    }, 0);
-    return total + mealCals;
+    const cals = parseInt(data[meal.id]?.calories?.toString().replace(/\D/g, ''), 10);
+    return total + (isNaN(cals) ? 0 : cals);
   }, 0);
 
   return (
@@ -90,26 +88,40 @@ export default function DayCard({ dayId, dayName, data, updateDish, removeDish, 
       {MEALS_CONFIG.map(meal => {
         if (!showDessertDrinks && (meal.id === 'dessert' || meal.id === 'drinks')) return null;
         
-        const dishes = data[meal.id]?.dishes || [];
+        const mealData = data[meal.id] || {};
+        const dishes = mealData.dishes || [];
         const isEmpty = dishes.length === 0;
+        const mealCaloriesRaw = parseInt(mealData.calories?.toString().replace(/\D/g, ''), 10);
+        const mealCalories = isNaN(mealCaloriesRaw) ? 0 : mealCaloriesRaw;
 
         return (
           <div key={meal.id} style={{ marginBottom: '14px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '5px' }}>
-              <span style={{
-                display: 'inline-flex',
-                width: '26px',
-                height: '26px',
-                borderRadius: '50%',
-                background: meal.iconColor,
-                color: meal.iconTextColor,
-                alignItems: 'center',
-                justifyContent: 'center',
-                flex: 'none'
-              }}>
-                {meal.iconSvg}
-              </span>
-              <span style={{ fontFamily: 'var(--font-heading)', fontSize: '13px', flex: 1 }}>{meal.name}</span>
+              <div
+                onClick={() => setActiveMealMacros(meal.id)}
+                title="Clique para editar calorias e macros"
+                style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1, cursor: 'pointer' }}
+              >
+                <span style={{
+                  display: 'inline-flex',
+                  width: '26px',
+                  height: '26px',
+                  borderRadius: '50%',
+                  background: meal.iconColor,
+                  color: meal.iconTextColor,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flex: 'none'
+                }}>
+                  {meal.iconSvg}
+                </span>
+                <span style={{ fontFamily: 'var(--font-heading)', fontSize: '13px' }}>{meal.name}</span>
+                {mealCalories > 0 && (
+                  <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-accent-700)', background: 'var(--color-accent-100)', padding: '2px 6px', borderRadius: '8px' }}>
+                    {mealCalories} kcal
+                  </span>
+                )}
+              </div>
               <button onClick={() => addDish(dayId, meal.id)} className="btn btn-icon btn-ghost" style={{ width: '28px', height: '28px' }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.75" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -162,12 +174,21 @@ export default function DayCard({ dayId, dayName, data, updateDish, removeDish, 
       })}
 
       {activeDish && (
-        <DishModal 
-          dish={activeDish} 
+        <DishModal
+          dish={activeDish}
           onClose={() => setActiveDish(null)}
           onSave={(updatedDish) => {
             updateDish(dayId, activeDish.mealId, activeDish.id, updatedDish);
           }}
+        />
+      )}
+
+      {activeMealMacros && (
+        <MealMacrosModal
+          mealName={MEALS_CONFIG.find(m => m.id === activeMealMacros)?.name}
+          macros={data[activeMealMacros] || {}}
+          onClose={() => setActiveMealMacros(null)}
+          onSave={(patch) => updateMealMacros(dayId, activeMealMacros, patch)}
         />
       )}
     </section>

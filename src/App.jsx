@@ -62,7 +62,7 @@ function App() {
           ...dayData,
           [mealId]: {
             ...mealData,
-            dishes: [...(mealData.dishes || []), { id: Date.now().toString(), name: 'Novo prato', ingredients: '', calories: '', done: false }]
+            dishes: [...(mealData.dishes || []), { id: Date.now().toString(), name: 'Novo prato', ingredients: '', done: false }]
           }
         }
       };
@@ -129,6 +129,23 @@ function App() {
           [targetMealId]: {
             ...(prev[targetDayId]?.[targetMealId] || {}),
             dishes: newTargetDishes
+          }
+        }
+      };
+    });
+  };
+
+  const updateMealMacros = (dayId, mealId, patch) => {
+    setWeeklyData(prev => {
+      const dayData = prev[dayId] || {};
+      const mealData = dayData[mealId] || { dishes: [] };
+      return {
+        ...prev,
+        [dayId]: {
+          ...dayData,
+          [mealId]: {
+            ...mealData,
+            ...patch
           }
         }
       };
@@ -206,10 +223,8 @@ function App() {
     let total = 0;
     Object.values(weeklyData).forEach(dayData => {
       Object.values(dayData).forEach(mealData => {
-        (mealData.dishes || []).forEach(dish => {
-          const cals = parseInt(dish.calories?.toString().replace(/\D/g, ''), 10);
-          if (!isNaN(cals)) total += cals;
-        });
+        const cals = parseInt(mealData.calories?.toString().replace(/\D/g, ''), 10);
+        if (!isNaN(cals)) total += cals;
       });
     });
     return total;
@@ -323,12 +338,13 @@ function App() {
       </header>
 
       {viewMode === 'week' ? (
-        <WeeklyGrid 
-          weeklyData={weeklyData} 
+        <WeeklyGrid
+          weeklyData={weeklyData}
           addDish={addDish}
-          updateDish={updateDish} 
+          updateDish={updateDish}
           removeDish={removeDish}
           moveDish={moveDish}
+          updateMealMacros={updateMealMacros}
         />
       ) : (
         <TodayView
@@ -339,6 +355,7 @@ function App() {
           moveDish={moveDish}
           goals={goals}
           updateGoal={updateGoal}
+          updateMealMacros={updateMealMacros}
         />
       )}
       

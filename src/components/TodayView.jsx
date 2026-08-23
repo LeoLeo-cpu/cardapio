@@ -2,7 +2,7 @@ import React from 'react';
 import DayCard from './DayCard';
 import NutritionDashboard from './NutritionDashboard';
 
-export default function TodayView({ weeklyData, updateDish, removeDish, addDish, moveDish, goals, updateGoal }) {
+export default function TodayView({ weeklyData, updateDish, removeDish, addDish, moveDish, goals, updateGoal, updateMealMacros }) {
   // Get current day id (e.g. 'mon', 'tue')
   const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
   const todayIndex = new Date().getDay();
@@ -32,6 +32,7 @@ export default function TodayView({ weeklyData, updateDish, removeDish, addDish,
           removeDish={removeDish}
           addDish={addDish}
           moveDish={moveDish}
+          updateMealMacros={updateMealMacros}
           showDessertDrinks={true}
         />
       </div>
