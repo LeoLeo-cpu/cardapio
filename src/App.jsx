@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import WeeklyGrid from './components/WeeklyGrid';
 import TodayView from './components/TodayView';
 import { MEAL_IDS } from './components/DayCard';
@@ -15,6 +15,7 @@ const STORAGE_KEY_TITLE = 'cardapio_semanal_title_v2';
 const STORAGE_KEY_GOALS = 'cardapio_semanal_goals_v1';
 
 function App() {
+  const fileInputRef = useRef(null);
   const [weeklyData, setWeeklyData] = useState({});
   const [shopping, setShopping] = useState([]);
   const [stickers, setStickers] = useState([]);
@@ -260,6 +261,55 @@ function App() {
     setStickers(prev => prev.filter(st => st.id !== id));
   };
 
+  const handleImportFile = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      let parsed;
+      try {
+        parsed = JSON.parse(reader.result);
+      } catch (err) {
+        alert('Arquivo inválido: não é um JSON válido.');
+        e.target.value = '';
+        return;
+      }
+
+      if (!window.confirm('Isso vai substituir todos os dados atuais. Continuar?')) {
+        e.target.value = '';
+        return;
+      }
+
+      setWeeklyData(parsed.weeklyData || {});
+      setShopping(parsed.shopping || []);
+      setStickers(parsed.stickers || []);
+      setWeekLabel(parsed.weekLabel || 'Minha semana');
+      setGoals(parsed.goals || { cals: 2000, p: 150, c: 200, f: 65 });
+
+      e.target.value = '';
+    };
+    reader.readAsText(file);
+  };
+
+  const exportBackup = () => {
+    const backup = {
+      exportedAt: new Date().toISOString(),
+      weeklyData,
+      shopping,
+      stickers,
+      weekLabel,
+      goals
+    };
+    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `cardapio-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const calculateWeeklyCalories = () => {
     let total = 0;
     Object.values(weeklyData).forEach(dayData => {
@@ -317,6 +367,53 @@ function App() {
             </svg>
             Substituições
           </button>
+          <button
+            onClick={exportBackup}
+            title="Exportar backup"
+            className="btn btn-ghost"
+            style={{
+              marginLeft: '8px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              background: 'rgba(255,255,255,0.5)',
+              padding: '6px 10px',
+              borderRadius: '20px'
+            }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 3v12"></path>
+              <path d="m7 10 5 5 5-5"></path>
+              <path d="M5 21h14"></path>
+            </svg>
+          </button>
+          <button
+            onClick={() => fileInputRef.current.click()}
+            title="Importar backup"
+            className="btn btn-ghost"
+            style={{
+              marginLeft: '8px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              background: 'rgba(255,255,255,0.5)',
+              padding: '6px 10px',
+              borderRadius: '20px'
+            }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 21V9"></path>
+              <path d="m7 14 5-5 5 5"></path>
+              <path d="M5 3h14"></path>
+            </svg>
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="application/json"
+            onChange={handleImportFile}
+            style={{ display: 'none' }}
+          />
           {weeklyCalories > 0 && (
             <span style={{
               marginLeft: 'auto',
