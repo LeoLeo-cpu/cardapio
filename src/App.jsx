@@ -187,14 +187,14 @@ function App() {
   if (!isLoaded) return null;
 
   return (
-    <div style={{
-      backgroundImage: 'url(/background.jpg)',
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundAttachment: 'fixed',
-      minHeight: '100vh',
-      width: '100%'
-    }}>
+    <div style={{ minHeight: '100vh', width: '100%' }}>
+      <div style={{
+        position: 'fixed',
+        inset: 0,
+        backgroundImage: 'url(/background.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center'
+      }} />
       <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '28px 24px 70px', position: 'relative' }}>
 
       <header style={{ position: 'relative', zIndex: 1, marginBottom: '22px' }}>
