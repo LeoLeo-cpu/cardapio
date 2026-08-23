@@ -1,7 +1,7 @@
 import React from 'react';
 import EditableText from './EditableText';
 
-export default function ShoppingList({ shopping, addShoppingItem, updateShoppingItem, removeShoppingItem }) {
+export default function ShoppingList({ shopping, addShoppingItem, updateShoppingItem, removeShoppingItem, generateShoppingList }) {
   const isEmpty = shopping.length === 0;
 
   return (
@@ -31,7 +31,12 @@ export default function ShoppingList({ shopping, addShoppingItem, updateShopping
           </svg>
         </span>
         <h3 style={{ fontSize: '18px', margin: 0, flex: 1 }}>Lista de compras</h3>
-        <button onClick={addShoppingItem} className="btn btn-icon btn-ghost" style={{ width: '28px', height: '28px' }}>
+        <button onClick={generateShoppingList} title="Gerar lista da semana" className="btn btn-icon btn-ghost" style={{ width: '28px', height: '28px' }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.75" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M18 6l-2.5 2.5M8.5 15.5L6 18"></path>
+          </svg>
+        </button>
+        <button onClick={addShoppingItem} title="Adicionar item" className="btn btn-icon btn-ghost" style={{ width: '28px', height: '28px' }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.75" strokeLinecap="round" strokeLinejoin="round">
             <line x1="12" y1="5" x2="12" y2="19"></line>
             <line x1="5" y1="12" x2="19" y2="12"></line>

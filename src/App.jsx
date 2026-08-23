@@ -153,6 +153,39 @@ function App() {
     setShopping(prev => prev.filter(item => item.id !== id));
   };
 
+  const generateShoppingList = () => {
+    const existingTexts = new Set(
+      shopping.map(item => (item.text || '').trim().toLowerCase())
+    );
+    const newTexts = new Set();
+
+    Object.values(weeklyData).forEach(dayData => {
+      Object.values(dayData).forEach(mealData => {
+        (mealData.dishes || []).forEach(dish => {
+          const ingredients = Array.isArray(dish.ingredients) ? dish.ingredients : [];
+          ingredients.forEach(ing => {
+            const normalized = (ing.text || '').trim();
+            if (!normalized) return;
+            const key = normalized.toLowerCase();
+            if (!existingTexts.has(key) && !newTexts.has(key)) {
+              newTexts.add(key);
+            }
+          });
+        });
+      });
+    });
+
+    if (newTexts.size === 0) return;
+
+    const newItems = [...newTexts].map((key, i) => ({
+      id: `${Date.now()}-${i}`,
+      text: key,
+      done: false
+    }));
+
+    setShopping(prev => [...prev, ...newItems]);
+  };
+
   // Sticker actions
   const addSticker = (emoji, x, y) => {
     setStickers(prev => [
@@ -309,11 +342,12 @@ function App() {
         />
       )}
       
-      <ShoppingList 
+      <ShoppingList
         shopping={shopping}
         addShoppingItem={addShoppingItem}
         updateShoppingItem={updateShoppingItem}
         removeShoppingItem={removeShoppingItem}
+        generateShoppingList={generateShoppingList}
       />
       
       <StickerPad onAddSticker={addSticker} />
