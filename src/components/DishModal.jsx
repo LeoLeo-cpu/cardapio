@@ -16,7 +16,7 @@ export default function DishModal({ dish, onClose, onSave }) {
   const handleIngredientAdd = () => {
     setLocalDish(prev => ({
       ...prev,
-      ingredients: [...(prev.ingredients || []), { id: Date.now().toString(), text: 'novo ingrediente', done: false }]
+      ingredients: [...(prev.ingredients || []), { id: crypto.randomUUID(), text: 'novo ingrediente', done: false }]
     }));
   };
 
