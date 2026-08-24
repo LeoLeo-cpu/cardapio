@@ -38,6 +38,14 @@ const MEALS_CONFIG = [
     iconColor: 'var(--color-accent-100)',
     iconTextColor: 'var(--color-accent-700)',
     iconSvg: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.75" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3a7 7 0 1 0 9 9 9 9 0 0 1-9-9Z"></path></svg>
+  },
+  {
+    id: 'dessert',
+    name: 'Sobremesa',
+    iconColor: 'var(--color-accent-2-100)',
+    iconTextColor: 'var(--color-accent-2-700)',
+    iconSvg: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.75" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="5"></circle><path d="M8.5 12 12 21l3.5-9"></path></svg>,
+    hasDrinks: false
   }
 ];
 
@@ -164,32 +172,36 @@ export default function DayCard({ dayId, dayName, data, updateDish, removeDish, 
               )}
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: '8px 0 5px' }}>
-              <span style={{ fontFamily: 'var(--font-heading)', fontSize: '12px', opacity: 0.7, flex: 1 }}>Bebidas</span>
-              <button onClick={() => addDrink(dayId, meal.id)} className="btn btn-icon btn-ghost" style={{ width: '24px', height: '24px' }}>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.75" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="12" y1="5" x2="12" y2="19"></line>
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
-              </button>
-            </div>
-            <div style={{ padding: '5px' }}>
-              {drinks.map(drink => (
-                <PratoRow
-                  key={drink.id}
-                  dayId={dayId}
-                  mealId={meal.id}
-                  dish={drink}
-                  draggable={false}
-                  updateDish={(patch) => updateDrink(dayId, meal.id, drink.id, patch)}
-                  removeDish={() => removeDrink(dayId, meal.id, drink.id)}
-                  onRowClick={() => setActiveDish({ ...drink, mealId: meal.id, listKey: 'drinks' })}
-                />
-              ))}
-              {isDrinksEmpty && (
-                <div style={{ fontSize: '12px', opacity: 0.4, padding: '4px 4px' }}>nenhuma bebida ainda</div>
-              )}
-            </div>
+            {meal.hasDrinks !== false && (
+              <>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: '8px 0 5px' }}>
+                  <span style={{ fontFamily: 'var(--font-heading)', fontSize: '12px', opacity: 0.7, flex: 1 }}>Bebidas</span>
+                  <button onClick={() => addDrink(dayId, meal.id)} className="btn btn-icon btn-ghost" style={{ width: '24px', height: '24px' }}>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.75" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                  </button>
+                </div>
+                <div style={{ padding: '5px' }}>
+                  {drinks.map(drink => (
+                    <PratoRow
+                      key={drink.id}
+                      dayId={dayId}
+                      mealId={meal.id}
+                      dish={drink}
+                      draggable={false}
+                      updateDish={(patch) => updateDrink(dayId, meal.id, drink.id, patch)}
+                      removeDish={() => removeDrink(dayId, meal.id, drink.id)}
+                      onRowClick={() => setActiveDish({ ...drink, mealId: meal.id, listKey: 'drinks' })}
+                    />
+                  ))}
+                  {isDrinksEmpty && (
+                    <div style={{ fontSize: '12px', opacity: 0.4, padding: '4px 4px' }}>nenhuma bebida ainda</div>
+                  )}
+                </div>
+              </>
+            )}
           </div>
         );
       })}
